@@ -1,0 +1,215 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+
+  /* Deep dark rich colors (dark mode defaults) */
+  --color-void: #050505;
+  --color-surface: rgba(20, 20, 25, 0.7);
+  --color-surface-hover: rgba(30, 30, 40, 0.9);
+
+  /* Neon Purple Core Palette */
+  --color-neon-purple: #9d00ff;
+  --color-neon-purple-glow: rgba(157, 0, 255, 0.5);
+  --color-neon-pink: #d900ff;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ============================================================
+   DARK THEME (default)
+   ============================================================ */
+:root,
+html[data-theme="dark"] {
+  --bg: #050505;
+  --fg: #fafafa;
+
+  /* Surfaces */
+  --surface: rgba(20, 20, 25, 0.7);
+  --surface-hover: rgba(30, 30, 40, 0.9);
+  --surface-card: rgba(12, 12, 18, 0.85);
+  --surface-input: rgba(5, 5, 5, 0.9);
+
+  /* Borders */
+  --border: rgba(255, 255, 255, 0.10);
+  --border-strong: rgba(255, 255, 255, 0.20);
+  --border-focus: rgba(157, 0, 255, 0.60);
+
+  /* Text */
+  --text-primary: #fafafa;
+  --text-secondary: rgba(255, 255, 255, 0.60);
+  --text-muted: rgba(255, 255, 255, 0.40);
+  --text-placeholder: rgba(255, 255, 255, 0.40);
+
+  /* Interactive Grid */
+  --grid-dot-idle: rgba(255, 255, 255, 0.10);
+  --grid-dot-active: #9d00ff;
+
+  /* Neon floor glow */
+  --floor-opacity: 0.6;
+
+  /* Scrollbar */
+  --scrollbar-track: rgba(255, 255, 255, 0.03);
+  --scrollbar-thumb: rgba(157, 0, 255, 0.40);
+  --scrollbar-thumb-hover: rgba(157, 0, 255, 0.70);
+
+  /* Selection */
+  --selection-bg: rgba(157, 0, 255, 0.30);
+}
+
+/* ============================================================
+   LIGHT THEME
+   ============================================================ */
+html[data-theme="light"] {
+  /* Using a highly optimized, subtle multi-gradient approach to retain the premium feel without the massive render lag */
+  --bg: radial-gradient(circle at 0% 0%, rgba(157, 0, 255, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 100% 100%, rgba(200, 100, 255, 0.03) 0%, transparent 40%),
+    linear-gradient(135deg, #fcfcfd 0%, #f4f5f8 100%);
+
+  --bg-color: #f8f8fb;
+  /* Fallback flat color */
+  --fg: #1a1630;
+
+  /* Surfaces - More transparent to let the gradient show through */
+  --surface: rgba(255, 255, 255, 0.40);
+  --surface-hover: rgba(255, 255, 255, 0.60);
+  --surface-card: rgba(255, 255, 255, 0.50);
+  --surface-input: rgba(255, 255, 255, 0.60);
+
+  /* Borders - Softer borders */
+  --border: rgba(26, 22, 48, 0.08);
+  /* Very subtle dark border */
+  --border-strong: rgba(26, 22, 48, 0.15);
+  --border-focus: rgba(157, 0, 255, 0.50);
+
+  /* Text - Dark and sharp */
+  --text-primary: #111118;
+  --text-secondary: rgba(17, 17, 24, 0.70);
+  --text-muted: rgba(17, 17, 24, 0.45);
+  --text-placeholder: rgba(17, 17, 24, 0.35);
+
+  /* Interactive Grid - Subtle dark dots */
+  --grid-dot-idle: rgba(17, 17, 24, 0.15);
+  --grid-dot-active: rgba(157, 0, 255, 0.5);
+
+  /* Neon floor glow - Disabled or extremely faint in this premium light mode */
+  --floor-opacity: 0;
+
+  /* Scrollbar */
+  --scrollbar-track: rgba(17, 17, 24, 0.05);
+  --scrollbar-thumb: rgba(17, 17, 24, 0.20);
+  --scrollbar-thumb-hover: rgba(17, 17, 24, 0.40);
+
+  /* Selection */
+  --selection-bg: rgba(157, 0, 255, 0.15);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  ::selection {
+    background-color: var(--selection-bg);
+  }
+
+  body {
+    background-color: var(--bg-color, var(--bg));
+    background-image: var(--bg);
+    background-origin: border-box;
+    background-attachment: fixed;
+    color: var(--fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+}
+
+@layer utilities {
+
+  /* ---- Glow utilities (always neon purple) ---- */
+  .glow-purple {
+    box-shadow: 0 0 40px var(--color-neon-purple-glow), inset 0 0 10px rgba(157, 0, 255, 0.2);
+  }
+
+  .glow-text-purple {
+    text-shadow: 0 0 20px var(--color-neon-purple-glow);
+  }
+
+  /* ---- Floor neon bleed ---- */
+  .neon-floor {
+    position: fixed;
+    bottom: -20vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60vw;
+    height: 40vh;
+    background: radial-gradient(ellipse at center,
+        var(--color-neon-purple) 0%,
+        var(--color-neon-pink) 30%,
+        transparent 70%);
+    filter: blur(80px);
+    opacity: var(--floor-opacity);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* ---- Scrollbar ---- */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+  }
+
+  /* ---- Semantic theme classes ---- */
+  .theme-bg {
+    background-color: var(--bg);
+  }
+
+  .theme-surface {
+    background-color: var(--surface);
+  }
+
+  .theme-card {
+    background-color: var(--surface-card);
+  }
+
+  .theme-input {
+    background-color: var(--surface-input);
+  }
+
+  .theme-text {
+    color: var(--text-primary);
+  }
+
+  .theme-text-sec {
+    color: var(--text-secondary);
+  }
+
+  .theme-text-mut {
+    color: var(--text-muted);
+  }
+
+  .theme-border {
+    border-color: var(--border);
+  }
+
+  .theme-border-s {
+    border-color: var(--border-strong);
+  }
+}

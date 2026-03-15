@@ -1,0 +1,177 @@
+{
+  "app": {
+    "title": "ApplyAI API",
+    "description": "API for CV matching, offer analysis, and cover-letter generation",
+    "version": "1.0.0",
+    "default_cv_path": "testAI/CV.pdf"
+  },
+  "server": {
+    "host": "127.0.0.1",
+    "port": 8010,
+    "reload": true
+  },
+  "logging": {
+    "level": "INFO"
+  },
+  "api": {
+    "cors": {
+      "allow_origins": [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000"
+      ],
+      "allow_credentials": false,
+      "allow_methods": [
+        "GET",
+        "POST"
+      ],
+      "allow_headers": [
+        "*"
+      ]
+    },
+    "search_defaults": {
+      "language": "fr",
+      "posted_within": "7d",
+      "limit": 20
+    }
+  },
+  "cache": {
+    "cv": {
+      "max_entries": 32,
+      "ttl_hours": 12
+    }
+  },
+  "document_ingestion": {
+    "enable_ocr": true,
+    "pdf_extension": ".pdf",
+    "word_extensions": [
+      ".docx"
+    ],
+    "text_extensions": [
+      ".txt",
+      ".md",
+      ".rtf"
+    ],
+    "image_extensions": [
+      ".png",
+      ".jpg",
+      ".jpeg",
+      ".webp",
+      ".bmp",
+      ".tif",
+      ".tiff"
+    ],
+    "pdf_text_min_chars_before_ocr": 120,
+    "pdf_ocr_max_pages": 10,
+    "pdf_ocr_zoom": 2.0,
+    "ocr_max_image_side": 2200,
+    "ocr_binarize_threshold": 180
+  },
+  "llm": {
+    "provider": "ollama",
+    "force_cuda": true,
+    "routing": {
+      "mode": "single",
+      "task_providers": {
+        "cv_parser": null,
+        "job_scraper": null,
+        "matcher": null,
+        "document_generator": null
+      }
+    },
+    "temperatures": {
+      "cv_parser": 0.0,
+      "job_scraper": 0.0,
+      "matcher": 0.0,
+      "document_generator": 0.7
+    },
+    "ollama": {
+      "model": "llama3:8b",
+      "base_url": "http://127.0.0.1:11434",
+      "num_ctx": 8192,
+      "num_gpu": null
+    },
+    "groq": {
+      "model": "llama-3.3-70b-versatile"
+    },
+    "openai": {
+      "model": "gpt-4o-mini"
+    },
+    "anthropic": {
+      "model": "claude-3-5-haiku-latest"
+    },
+    "gemini": {
+      "model": "gemini-2.0-flash"
+    },
+    "mistral": {
+      "model": "mistral-small-latest"
+    }
+  },
+  "cv_parser": {
+    "model_name": "gpt-4o-mini",
+    "use_llm": false,
+    "max_experience_entries": 18,
+    "max_education_entries": 10
+  },
+  "job_scraper": {
+    "model_name": "gpt-4o-mini",
+    "default_use_llm": false,
+    "default_allow_llm_refinement": false,
+    "llm_max_input_chars": 15000,
+    "fallback_description_chars": 500,
+    "heuristic_description_max_lines": 5,
+    "title_sample_lines": 15,
+    "title_scan_lines": 8,
+    "company_sample_lines": 25,
+    "company_scan_lines": 12,
+    "location_sample_lines": 40,
+    "location_scan_lines": 15,
+    "title_max_length": 90,
+    "company_max_length": 70,
+    "max_clean_value_length": 110,
+    "sentence_max_words": 8,
+    "min_skill_count_for_no_refinement": 3,
+    "noisy_bullet_count_threshold": 4,
+    "bad_skill_max_length": 48,
+    "bad_skill_max_words": 5
+  },
+  "matching": {
+    "model_name": "gpt-4o-mini",
+    "score": {
+      "empty_job_score": 50,
+      "coverage_weight": 0.84,
+      "breadth_bonus_multiplier": 1.5,
+      "breadth_bonus_cap": 8,
+      "experience_bonus_per_hit": 2,
+      "experience_bonus_cap": 10,
+      "education_bonus_per_hit": 1,
+      "education_bonus_cap": 4
+    },
+    "reasoning": {
+      "default_use_llm": false,
+      "matched_skill_limit": 6,
+      "missing_skill_limit": 6,
+      "experience_evidence_limit": 5
+    }
+  },
+  "documents": {
+    "model_name": "gpt-4o",
+    "default_use_llm_cover_letter": true,
+    "summary_matched_skill_limit": 6,
+    "summary_missing_skill_limit": 4,
+    "summary_experience_limit": 2,
+    "summary_education_limit": 1,
+    "fallback_cover_letter_skill_limit": 4,
+    "fallback_cover_letter_experience_limit": 1,
+    "fallback_cover_letter_education_limit": 1,
+    "incomplete_min_length": 180,
+    "incomplete_min_line_breaks": 2
+  },
+  "pipeline": {
+    "text_match": {
+      "job_scraper_use_llm": false,
+      "allow_llm_refinement": false,
+      "matcher_use_llm_reasoning": false,
+      "document_use_llm_cover_letter": true
+    }
+  }
+}

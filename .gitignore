@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.coverage
+.env
+.venv/
+venv/
+manual_test_outputs/
+tests/
+dist/
+build/
+*.log
+testAI/
+.local-private/
